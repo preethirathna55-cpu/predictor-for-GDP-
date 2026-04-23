@@ -109,7 +109,7 @@ elif worst == "Health":
 
 st.subheader("🤖 Predict GDP")
 
-    with st.expander("📥 Enter Economic Indicators", expanded=True):
+with st.expander("📥 Enter Economic Indicators", expanded=True):
 
 ```
 col1, col2 = st.columns(2)
