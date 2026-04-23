@@ -57,11 +57,11 @@ v1 = filtered[filtered['Year']==y1]['GDP'].values[0]
 v2 = filtered[filtered['Year']==y2]['GDP'].values[0]
 
 change = ((v2-v1)/v1)*100
-
 if change > 0:
-st.success(f"📈 Increase: {change:.2f}%")
+    st.success(f"📈 Increase: {change:.2f}%")
 else:
-st.error(f"📉 Decrease: {abs(change):.2f}%")
+    st.error(f"📉 Decrease: {abs(change):.2f}%")
+
 
 # ---------------- SECTOR ----------------
 
