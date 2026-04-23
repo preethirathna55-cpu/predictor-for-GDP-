@@ -2,18 +2,18 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
-import statsmodels.api as sm
 
 # ---------------- LOAD DATA ----------------
+
 @st.cache_data
 def load_data():
-    df = pd.read_csv("final_structured_dataset.csv")
-    return df
+df = pd.read_csv("final_structured_dataset.csv")
+return df
 
 @st.cache_resource
 def load_model():
-    model = pickle.load(open("model.pkl","rb"))
-    return model
+model = pickle.load(open("model.pkl", "rb"))
+return model
 
 df = load_data()
 model = load_model()
@@ -21,10 +21,12 @@ model = load_model()
 st.title("🌍 GDP Dashboard + Predictor")
 
 # ---------------- COUNTRY ----------------
+
 country = st.selectbox("Select Country", df['Country Name'].unique())
 filtered = df[df['Country Name'] == country]
 
 # ---------------- KPI ----------------
+
 st.subheader("📊 GDP Metrics")
 
 latest = filtered['Year'].max()
@@ -41,15 +43,17 @@ col2.metric("Previous GDP", f"{gdp_prev:.2f}")
 col3.metric("Growth %", f"{growth:.2f}%")
 
 # ---------------- TREND ----------------
+
 st.subheader("📈 GDP Trend")
 st.line_chart(filtered.set_index('Year')['GDP'])
 
 # ---------------- YEAR COMPARISON ----------------
+
 st.subheader("📊 Compare Years")
 
 years = sorted(filtered['Year'].unique())
 y1 = st.selectbox("Year 1", years)
-y2 = st.selectbox("Year 2", years, index=len(years)-1)
+y2 = st.selectbox("Year 2", years, index=len(years) - 1)
 
 v1 = filtered[filtered['Year'] == y1]['GDP'].values[0]
 v2 = filtered[filtered['Year'] == y2]['GDP'].values[0]
@@ -57,22 +61,23 @@ v2 = filtered[filtered['Year'] == y2]['GDP'].values[0]
 change = ((v2 - v1) / v1) * 100
 
 if change > 0:
-    st.success(f"📈 Increase: {change:.2f}%")
+st.success(f"📈 Increase: {change:.2f}%")
 else:
-    st.error(f"📉 Decrease: {abs(change):.2f}%")
+st.error(f"📉 Decrease: {abs(change):.2f}%")
 
-# ---------------- SECTOR ----------------
+# ---------------- SECTOR ANALYSIS ----------------
+
 st.subheader("🏢 Sector Analysis")
 
 latest_data = filtered[filtered['Year'] == latest]
 
 scores = {
-    "Investment": latest_data['Investment'].values[0],
-    "Trade": latest_data['Trade'].values[0],
-    "Education": latest_data['Education'].values[0],
-    "Health": latest_data['LifeExp'].values[0],
-    "Inflation": -latest_data['Inflation'].values[0],
-    "Unemployment": -latest_data['Unemployment'].values[0]
+"Investment": latest_data['Investment'].values[0],
+"Trade": latest_data['Trade'].values[0],
+"Education": latest_data['Education'].values[0],
+"Health": latest_data['LifeExp'].values[0],
+"Inflation": -latest_data['Inflation'].values[0],
+"Unemployment": -latest_data['Unemployment'].values[0]
 }
 
 score_df = pd.DataFrame(scores.items(), columns=["Sector", "Score"])
@@ -87,22 +92,24 @@ st.success(f"🔥 Strong: {best}")
 st.error(f"⚠ Weak: {worst}")
 
 # ---------------- RECOMMENDATION ----------------
+
 st.subheader("📌 Recommendation")
 
 if worst == "Unemployment":
-    st.write("Focus on job creation")
+st.write("Focus on job creation")
 elif worst == "Inflation":
-    st.write("Control inflation")
+st.write("Control inflation")
 elif worst == "Investment":
-    st.write("Increase investment")
+st.write("Increase investment")
 elif worst == "Trade":
-    st.write("Improve trade")
+st.write("Improve trade")
 elif worst == "Education":
-    st.write("Improve education")
+st.write("Improve education")
 elif worst == "Health":
-    st.write("Improve healthcare")
+st.write("Improve healthcare")
 
 # ---------------- PREDICTION ----------------
+
 st.subheader("🤖 Predict GDP")
 
 inflation = st.number_input("Inflation")
@@ -115,21 +122,6 @@ trade = st.number_input("Trade")
 pop = st.number_input("Population Growth")
 
 if st.button("Predict GDP"):
-    data = np.array([[inflation, unemployment, life_exp, education, gov, investment, trade, pop]])
-    pred = model.predict(data)
-    st.success(f"Predicted GDP: {pred[0]:.2f}")
-
-# ---------------- CORRELATION ----------------
-st.subheader("📊 Correlation Matrix")
-corr = df.drop(['Country Name'], axis=1).corr()
-st.dataframe(corr)
-
-# ---------------- REGRESSION ----------------
-st.subheader("📊 Regression (P-values)")
-X = df.drop(['Country Name','Year','GDP'], axis=1)
-y = df['GDP']
-
-X = sm.add_constant(X)
-model_ols = sm.OLS(y, X).fit()
-
-st.text(model_ols.summary())
+data = np.array([[inflation, unemployment, life_exp, education, gov, investment, trade, pop]])
+pred = model.predict(data)
+st.success(f"Predicted GDP: {pred[0]:.2f}")
