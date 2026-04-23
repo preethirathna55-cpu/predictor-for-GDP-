@@ -115,7 +115,11 @@ trade = st.number_input("Trade")
 pop = st.number_input("Population Growth")
 
 if st.button("Predict GDP"):
-    data = np.array([[inflation, unemployment, life_exp, education, gov, investment, trade, pop]])
-    pred = model.predict(data)
+   import statsmodels.api as sm
+
+data = np.array([[inflation, unemployment, life_exp, education, gov, investment, trade, pop]])
+
+data = sm.add_constant(data)  
+pred = model.predict(data)
     st.success(f"Predicted GDP: {pred[0]:.2f}")
 
