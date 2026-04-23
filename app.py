@@ -81,7 +81,7 @@ scores = {
 score_df = pd.DataFrame(scores.items(), columns=["Sector", "Score"])
 score_df = score_df.sort_values(by="Score", ascending=False)
 
-st.bar_chart(temp.set_index('Year')['GDP'])
+st.bar_chart(score_df.set_index("Sector"))
 
 best = score_df.iloc[0]['Sector']
 worst = score_df.iloc[-1]['Sector']
