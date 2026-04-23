@@ -114,12 +114,14 @@ investment = st.number_input("Investment")
 trade = st.number_input("Trade")
 pop = st.number_input("Population Growth")
 
-if st.button("Predict GDP"):
-   import statsmodels.api as sm
+if st.button("🚀 Predict GDP"):
+    try:
+        data = np.array([[inflation, unemployment, life_exp, education, gov, investment, trade, pop]])
+        data = sm.add_constant(data)
+        pred = model.predict(data)
 
-data = np.array([[inflation, unemployment, life_exp, education, gov, investment, trade, pop]])
+        st.success(f"💰 Predicted GDP: {pred[0]:.2f}")
 
-data = sm.add_constant(data)  
-pred = model.predict(data)
-    st.success(f"Predicted GDP: {pred[0]:.2f}")
+    except Exception as e:
+        st.error(f"Error: {e}")
 
