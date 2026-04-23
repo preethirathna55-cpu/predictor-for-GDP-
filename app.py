@@ -5,15 +5,14 @@ import pickle
 import statsmodels.api as sm
 
 # ---------------- LOAD DATA ----------------
-
 @st.cache_data
 def load_data():
-df = pd.read_csv("final_structured_dataset.csv")
-return df
+    df = pd.read_csv("final_structured_dataset.csv")
+    return df
 
 @st.cache_resource
 def load_model():
-return pickle.load(open("model.pkl","rb"))
+    return pickle.load(open("model.pkl","rb"))
 
 df = load_data()
 model = load_model()
