@@ -122,17 +122,4 @@ if st.button("Predict GDP"):
     pred = model.predict(data)
     st.success(f"Predicted GDP: {pred[0]:.2f}")
 
-# ---------------- CORRELATION ----------------
-st.subheader("📊 Correlation Matrix")
-corr = df.drop(['Country Name'], axis=1).corr()
-st.dataframe(corr)
 
-# ---------------- REGRESSION ----------------
-st.subheader("📊 Regression (P-values)")
-X = df.drop(['Country Name','Year','GDP'], axis=1)
-y = df['GDP']
-
-X = sm.add_constant(X)
-model_ols = sm.OLS(y, X).fit()
-
-st.text(model_ols.summary())
