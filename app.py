@@ -42,7 +42,10 @@ col3.metric("Growth %", f"{growth:.2f}%")
 
 # ---------------- TREND ----------------
 st.subheader("📈 GDP Trend")
-st.line_chart(filtered.set_index('Year')['GDP'])
+temp = filtered.copy()
+temp['Year'] = temp['Year'].astype(str)
+
+st.line_chart(temp.set_index('Year')['GDP'])
 
 # ---------------- YEAR COMPARISON ----------------
 st.subheader("📊 Compare Years")
@@ -78,7 +81,7 @@ scores = {
 score_df = pd.DataFrame(scores.items(), columns=["Sector", "Score"])
 score_df = score_df.sort_values(by="Score", ascending=False)
 
-st.bar_chart(score_df.set_index("Sector"))
+st.bar_chart(temp.set_index('Year')['GDP'])
 
 best = score_df.iloc[0]['Sector']
 worst = score_df.iloc[-1]['Sector']
@@ -118,3 +121,6 @@ if st.button("Predict GDP"):
     data = np.array([[inflation, unemployment, life_exp, education, gov, investment, trade, pop]])
     pred = model.predict(data)
     st.success(f"Predicted GDP: {pred[0]:.2f}")
+st.info("Data available till 2024. Future values can be predicted below.")
+
+
