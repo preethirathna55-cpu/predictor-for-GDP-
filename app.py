@@ -42,10 +42,7 @@ col3.metric("Growth %", f"{growth:.2f}%")
 
 # ---------------- TREND ----------------
 st.subheader("📈 GDP Trend")
-temp = filtered.copy()
-temp['Year'] = temp['Year'].astype(str)
-
-st.line_chart(temp.set_index('Year')['GDP'])
+st.line_chart(filtered.set_index('Year')['GDP'])
 
 # ---------------- YEAR COMPARISON ----------------
 st.subheader("📊 Compare Years")
@@ -106,31 +103,19 @@ elif worst == "Health":
     st.write("Improve healthcare")
 
 # ---------------- PREDICTION ----------------
-
 st.subheader("🤖 Predict GDP")
 
-with st.expander("📥 Enter Economic Indicators", expanded=True):
+inflation = st.number_input("Inflation")
+unemployment = st.number_input("Unemployment")
+life_exp = st.number_input("Life Expectancy")
+education = st.number_input("Education")
+gov = st.number_input("Gov Spending")
+investment = st.number_input("Investment")
+trade = st.number_input("Trade")
+pop = st.number_input("Population Growth")
 
-```
-col1, col2 = st.columns(2)
-
-with col1:
-    inflation = st.slider("Inflation (%)", 0.0, 20.0, 5.0)
-    unemployment = st.slider("Unemployment (%)", 0.0, 25.0, 6.0)
-    life_exp = st.slider("Life Expectancy", 40.0, 90.0, 70.0)
-    education = st.slider("Education (%)", 0.0, 100.0, 50.0)
-
-with col2:
-    gov = st.slider("Gov Spending (% GDP)", 0.0, 50.0, 20.0)
-    investment = st.slider("Investment (% GDP)", 0.0, 50.0, 25.0)
-    trade = st.slider("Trade (% GDP)", 0.0, 100.0, 40.0)
-    pop = st.slider("Population Growth (%)", -5.0, 5.0, 1.0)
-```
-
-if st.button("🚀 Predict GDP"):
-data = np.array([[inflation, unemployment, life_exp, education, gov, investment, trade, pop]])
-pred = model.predict(data)
-st.success(f"💰 Predicted GDP: {pred[0]:.2f}")
-
-
+if st.button("Predict GDP"):
+    data = np.array([[inflation, unemployment, life_exp, education, gov, investment, trade, pop]])
+    pred = model.predict(data)
+    st.success(f"Predicted GDP: {pred[0]:.2f}")
 
