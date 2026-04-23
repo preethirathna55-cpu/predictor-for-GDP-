@@ -121,6 +121,9 @@ if st.button("Predict GDP"):
     data = np.array([[inflation, unemployment, life_exp, education, gov, investment, trade, pop]])
     pred = model.predict(data)
     st.success(f"Predicted GDP: {pred[0]:.2f}")
-st.info("Data available till 2024. Future values can be predicted below.")
+if st.button("Predict Next Year (2025)"):
+    data = np.array([[inflation, unemployment, life_exp, education, gov, investment, trade, pop]])
+    pred = model.predict(data)
+    st.success(f"Predicted GDP for 2025: {pred[0]:.2f}")
 
 
